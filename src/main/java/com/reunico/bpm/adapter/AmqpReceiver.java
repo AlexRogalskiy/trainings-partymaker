@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-//@Component
+@Component
 @Profile("!test")
 public class AmqpReceiver {
 
@@ -26,10 +26,10 @@ public class AmqpReceiver {
   }
 
 
-//  @RabbitListener(bindings = @QueueBinding( //
-//      value = @Queue(value = "payment", durable = "true"), //
-//      exchange = @Exchange(value = "payment", type = "topic", durable = "true"), //
-//      key = "paymentResult"))
+  @RabbitListener(bindings = @QueueBinding(
+      value = @Queue(value = "payment", durable = "true"),
+      exchange = @Exchange(value = "paymentExchange", type = "topic", durable = "true"),
+      key = "paymentResult"))
   @Transactional  
   public void getPaymentInfo(String paymentResultStr) throws JsonProcessingException {
     System.out.println("New message:" + paymentResultStr);

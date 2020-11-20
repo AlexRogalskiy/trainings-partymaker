@@ -24,7 +24,7 @@ public class SendPayment implements JavaDelegate {
   public void execute(DelegateExecution ctx) throws Exception {
     Payment payment = (Payment) ctx.getVariable(ProcessVariablesConstants.PAYMENT);
     
-    String exchange = "payment";
+    String exchange = "paymentExchange";
     String routingKey = "receivePayment";
     
     rabbitTemplate.convertAndSend(exchange, routingKey, objectMapper.writeValueAsString(payment));
