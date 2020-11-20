@@ -12,6 +12,11 @@
   </bpmn:collaboration>
   <bpmn:process id="order" name="Обработка заказа" isExecutable="true">
     <bpmn:startEvent id="Event_1rf1ggd" name="Нужно организовать мероприятие">
+      <bpmn:extensionElements>
+        <camunda:formData businessKey="orderId">
+          <camunda:formField id="orderId" label="Номер заказа" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
       <bpmn:outgoing>Flow_0qx2xrp</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:userTask id="Activity_0bw1kog" name="Заказать мероприятие">
@@ -28,6 +33,16 @@
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="description" label="Описание желаемого" type="string" />
+          <camunda:formField id="amount" label="Сумма заказа" type="long">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="pan" label="Номер карты" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0qx2xrp</bpmn:incoming>

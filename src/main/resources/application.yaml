@@ -11,4 +11,7 @@ spring:
     host: 84.201.129.64
     password: Integration6
     username: odministrator
+  jpa:
+    hibernate:
+      ddl-auto: update
 
