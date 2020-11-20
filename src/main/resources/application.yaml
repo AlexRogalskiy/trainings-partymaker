@@ -6,5 +6,9 @@ camunda.bpm.admin-user:
 camunda:
   bpm:
     default-serialization-format: "application/json"
-rabbitmqHost: 84.201.129.64
-rsbbitMqPort: 5672
+spring:
+  rabbitmq:
+    host: 84.201.129.64
+    password: Integration6
+    username: odministrator
+
