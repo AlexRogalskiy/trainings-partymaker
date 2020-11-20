@@ -1,0 +1,10 @@
+spring.datasource.url: jdbc:h2:file:./camunda-h2-database
+
+camunda.bpm.admin-user:
+  id: demo
+  password: demo
+camunda:
+  bpm:
+    default-serialization-format: "application/json"
+rabbitmqHost: 84.201.129.64
+rsbbitMqPort: 5672
