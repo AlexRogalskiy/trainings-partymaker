@@ -6,7 +6,7 @@
     <bpmn:participant id="Participant_1p20xwz" name="Подрядчик" />
     <bpmn:messageFlow id="Flow_1xr9qkk" sourceRef="Activity_1d4b7n0" targetRef="Participant_1p20xwz" />
     <bpmn:messageFlow id="Flow_0tpmcm3" sourceRef="Participant_1p20xwz" targetRef="Activity_1d4b7n0" />
-    <bpmn:messageFlow id="Flow_1wv8uix" sourceRef="Activity_0yszqyn" targetRef="Event_09m854l" />
+    <bpmn:messageFlow id="Flow_1wv8uix" sourceRef="sendPayment" targetRef="Event_09m854l" />
     <bpmn:messageFlow id="Flow_0petj6k" sourceRef="Activity_1p14ez0" targetRef="Event_0umdrmn" />
     <bpmn:messageFlow id="Flow_19zde9z" sourceRef="Activity_047fjly" targetRef="Event_1cic8vw" />
   </bpmn:collaboration>
@@ -19,7 +19,7 @@
       </bpmn:extensionElements>
       <bpmn:outgoing>Flow_0qx2xrp</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:userTask id="Activity_0bw1kog" name="Заказать мероприятие">
+    <bpmn:userTask id="orderParty" name="Заказать мероприятие">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="customer" label="Клиент" type="string">
@@ -82,10 +82,10 @@
       <bpmn:outgoing>Flow_0g048nt</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_0mrvyh9" errorRef="Error_0ozv8b0" camunda:errorCodeVariable="partyFailed" camunda:errorMessageVariable="partyFailed" />
     </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="Flow_0qx2xrp" sourceRef="Event_1rf1ggd" targetRef="Activity_0bw1kog" />
-    <bpmn:sequenceFlow id="Flow_038lkj2" sourceRef="Activity_0bw1kog" targetRef="Activity_1ifhwwq" />
-    <bpmn:sequenceFlow id="Flow_0ojem4p" sourceRef="Activity_1ifhwwq" targetRef="Activity_0yszqyn" />
-    <bpmn:sequenceFlow id="Flow_0h4ec6a" sourceRef="Activity_0yszqyn" targetRef="Gateway_0dtmurp" />
+    <bpmn:sequenceFlow id="Flow_0qx2xrp" sourceRef="Event_1rf1ggd" targetRef="orderParty" />
+    <bpmn:sequenceFlow id="Flow_038lkj2" sourceRef="orderParty" targetRef="Activity_1ifhwwq" />
+    <bpmn:sequenceFlow id="Flow_0ojem4p" sourceRef="Activity_1ifhwwq" targetRef="sendPayment" />
+    <bpmn:sequenceFlow id="Flow_0h4ec6a" sourceRef="sendPayment" targetRef="Gateway_0dtmurp" />
     <bpmn:sequenceFlow id="Flow_0fbkzlo" sourceRef="Activity_1syisfw" targetRef="Gateway_19vv0pr" />
     <bpmn:sequenceFlow id="Flow_0x7d1hj" name="Нет" sourceRef="Gateway_19vv0pr" targetRef="Event_0ur6xzr">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${ !isContinue }</bpmn:conditionExpression>
@@ -99,7 +99,7 @@
       <bpmn:incoming>Flow_038lkj2</bpmn:incoming>
       <bpmn:outgoing>Flow_0ojem4p</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sendTask id="Activity_0yszqyn" name="Отправить запрос на списание ДС" camunda:asyncBefore="true" camunda:delegateExpression="${ sendPayment }">
+    <bpmn:sendTask id="sendPayment" name="Отправить запрос на списание ДС" camunda:asyncBefore="true" camunda:delegateExpression="${ sendPayment }">
       <bpmn:incoming>Flow_0ojem4p</bpmn:incoming>
       <bpmn:outgoing>Flow_0h4ec6a</bpmn:outgoing>
     </bpmn:sendTask>
@@ -237,13 +237,13 @@
           <dc:Bounds x="213" y="435" width="68" height="40" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0bw1kog_di" bpmnElement="Activity_0bw1kog">
+      <bpmndi:BPMNShape id="Activity_0bw1kog_di" bpmnElement="orderParty">
         <dc:Bounds x="330" y="370" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1ifhwwq_di" bpmnElement="Activity_1ifhwwq">
         <dc:Bounds x="490" y="370" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0u4gcjc_di" bpmnElement="Activity_0yszqyn">
+      <bpmndi:BPMNShape id="Activity_0u4gcjc_di" bpmnElement="sendPayment">
         <dc:Bounds x="650" y="370" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1x51ynd_di" bpmnElement="Gateway_0dtmurp">

@@ -1,5 +1,7 @@
 package com.reunico.bpm.domain;
 
+import java.util.Objects;
+
 public class Payment {
 
     private Long amount;
@@ -45,5 +47,18 @@ public class Payment {
                 "amount=" + amount +
                 ", pan='" + pan + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Payment payment = (Payment) o;
+        return orderId.equals(payment.orderId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(orderId);
     }
 }

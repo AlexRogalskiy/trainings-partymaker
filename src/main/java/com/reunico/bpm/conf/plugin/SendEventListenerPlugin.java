@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * A {@link ProcessEnginePlugin} just needs to be a spring bean in order
  * to get automatically registered in the Spring Boot environment.
  */
-@Component
+// @Component
 public class SendEventListenerPlugin extends AbstractProcessEnginePlugin {
 
 	@Override

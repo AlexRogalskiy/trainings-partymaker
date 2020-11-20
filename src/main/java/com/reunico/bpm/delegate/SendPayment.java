@@ -28,6 +28,8 @@ public class SendPayment implements JavaDelegate {
     String routingKey = "receivePayment";
     
     rabbitTemplate.convertAndSend(exchange, routingKey, objectMapper.writeValueAsString(payment));
+
+    System.out.println("New payment request: " + payment);
   }
 
 }
