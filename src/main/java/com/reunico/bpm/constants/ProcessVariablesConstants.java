@@ -9,4 +9,5 @@ public interface ProcessVariablesConstants {
     String PAN = "pan";
     String ORDER = "order";
     String PAYMENT = "payment";
+    String PAYMENT_RESULT = "PAYMENT_RESULT";
 }

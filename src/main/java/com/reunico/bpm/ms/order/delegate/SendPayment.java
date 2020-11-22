@@ -1,13 +1,14 @@
-package com.reunico.bpm.delegate;
+package com.reunico.bpm.ms.order.delegate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.reunico.bpm.constants.ExchangeConstants;
 import com.reunico.bpm.constants.ProcessVariablesConstants;
-import com.reunico.bpm.domain.Payment;
+import com.reunico.bpm.constants.RoutingKeyConstants;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import com.reunico.bpm.domain.*;
 
 @Component
 public class SendPayment implements JavaDelegate {
@@ -23,11 +24,11 @@ public class SendPayment implements JavaDelegate {
   @Override
   public void execute(DelegateExecution ctx) throws Exception {
     Payment payment = (Payment) ctx.getVariable(ProcessVariablesConstants.PAYMENT);
-    
-    String exchange = "paymentExchange";
-    String routingKey = "receivePayment";
-    
-    rabbitTemplate.convertAndSend(exchange, routingKey, objectMapper.writeValueAsString(payment));
+
+    rabbitTemplate.convertAndSend(
+            ExchangeConstants.PAYMENT_BUS,
+            RoutingKeyConstants.ORDER_PAYMENT,
+            objectMapper.writeValueAsString(payment));
 
     System.out.println("New payment request: " + payment);
   }

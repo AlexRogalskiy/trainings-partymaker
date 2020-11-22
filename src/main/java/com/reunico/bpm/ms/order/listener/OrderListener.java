@@ -1,8 +1,11 @@
-package com.reunico.bpm.adapter;
+package com.reunico.bpm.ms.order.listener;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.reunico.bpm.constants.ExchangeConstants;
 import com.reunico.bpm.constants.MessageTypeConstants;
+import com.reunico.bpm.constants.RoutingKeyConstants;
+import com.reunico.bpm.domain.Payment;
 import com.reunico.bpm.domain.PaymentResult;
 import org.camunda.bpm.engine.RuntimeService;
 import org.springframework.amqp.rabbit.annotation.Exchange;
@@ -15,34 +18,36 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @Profile("!test")
-public class AmqpReceiver {
+public class OrderListener {
 
   private final RuntimeService runtimeService;
   private final ObjectMapper objectMapper;
 
-  public AmqpReceiver(RuntimeService runtimeService, ObjectMapper objectMapper) {
+  public OrderListener(RuntimeService runtimeService, ObjectMapper objectMapper) {
     this.runtimeService = runtimeService;
     this.objectMapper = objectMapper;
   }
 
 
+
   @RabbitListener(bindings = @QueueBinding(
-      value = @Queue(value = "payment", durable = "true"),
-      exchange = @Exchange(value = "paymentExchange", type = "topic", durable = "true"),
-      key = "paymentResult"))
+      value = @Queue(value = RoutingKeyConstants.PAYMENT_ORDER, durable = "true"),
+      exchange = @Exchange(value = ExchangeConstants.PAYMENT_BUS, type = "topic", durable = "true"),
+      key = RoutingKeyConstants.PAYMENT_ORDER))
   @Transactional  
-  public void getPaymentInfo(String paymentResultStr) throws JsonProcessingException {
-    System.out.println("New message:" + paymentResultStr);
+  public void getPaymentResult(String paymentResultStr) throws JsonProcessingException {
+    System.out.println("Новый результат списания средств:" + paymentResultStr);
     PaymentResult paymentResult = mapToPr(paymentResultStr);
     if (paymentResult.getResult()) {
-      runtimeService.correlateMessage(paymentResult.getOrderId(), MessageTypeConstants.PAYMENT_SUCCESS);
+      runtimeService.createMessageCorrelation(MessageTypeConstants.PAYMENT_SUCCESS)
+              .processInstanceBusinessKey(paymentResult.getOrderId()).correlateAll();
     } else {
-      runtimeService.correlateMessage(paymentResult.getOrderId(), MessageTypeConstants.PAYMENT_FAILED);
+      runtimeService.createMessageCorrelation(MessageTypeConstants.PAYMENT_FAILED)
+              .processInstanceBusinessKey(paymentResult.getOrderId()).correlateAll();
     }
   }
 
   public PaymentResult mapToPr(String paymentResultStr) throws JsonProcessingException {
     return objectMapper.readValue(paymentResultStr, PaymentResult.class);
   }
-  
 }

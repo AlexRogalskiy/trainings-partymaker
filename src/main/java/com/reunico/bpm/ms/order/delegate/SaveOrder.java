@@ -1,11 +1,11 @@
-package com.reunico.bpm.delegate;
+package com.reunico.bpm.ms.order.delegate;
 
 import com.reunico.bpm.constants.ProcessVariablesConstants;
-import com.reunico.bpm.domain.Order;
-import com.reunico.bpm.domain.Payment;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import com.reunico.bpm.domain.*;
 import org.springframework.stereotype.Component;
+import com.reunico.bpm.domain.*;
 
 @Component
 public class SaveOrder implements JavaDelegate {
