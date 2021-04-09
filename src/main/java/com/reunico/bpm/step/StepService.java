@@ -17,7 +17,6 @@ public class StepService {
     public void messageSaved(Order order, String message) {
 
         runtimeService.correlateMessage(message);
-        runtimeService.startM
         System.out.println("New order received" + order);
     }
 
